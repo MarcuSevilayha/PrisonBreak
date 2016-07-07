@@ -129,7 +129,7 @@ public class TextController : MonoBehaviour
 
 	void begin ()
 	{
-		text.text = "You have awaken on a cold concrete floor. You groggily push yourself into a sitting position, feeling patches of grass growing from the lifeless concrete around you. " +
+		text.text = "You have awoken on a cold concrete floor. You groggily push yourself into a sitting position, feeling patches of grass growing from the lifeless concrete around you. " +
 			"Confused, you stand up and notice your entire right leg slightly throbbing.\n " +
 			"\n" +
 			"Dismissing whatever affliction your leg has contracted for the moment, " +
