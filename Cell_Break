@@ -8,15 +8,16 @@ public class TextController : MonoBehaviour
 	public Text text, inventory;
 	private enum States {begin, belong,
 						cell, cell_return,
-						chest_0, chest_1, chest_leg, chest_leg_shard, chest_sharp_leg, chest_open, chest_opened, chest_done,
+						chest_0, chest_1, chest_leg, chest_shard, chest_leg_shard, chest_sharp_leg, chest_open, chest_opened, chest_done,
 						mirror_0, mirror_1, mirror_me, mirror_done,
 						chair_0, chair_1, chair_done,
-						door_0, door_1, door_inspect, freedom,
+						gate_0, gate_1, gate_inspect, gate_open_cut,
 						window_0, window_1};
 
 	private enum Items {empty, small_key, chair_leg, sharp_chair_leg, mirror_shard, cut_hand};
 	private States myState;
 	private Items self_Hand, inv_smallKey, inv_chairLeg, inv_mirrorShard;
+	private bool smallKey, chairLeg, sharpChairLeg, mirrorShard, cutHand;
 
 	// Use this for initialization
 	void Start ()
@@ -25,6 +26,13 @@ public class TextController : MonoBehaviour
 		inv_smallKey = Items.empty;
 		inv_chairLeg = Items.empty;
 		inv_mirrorShard = Items.empty;
+		self_Hand = Items.empty;
+
+		smallKey = false;
+		chairLeg = false;
+		sharpChairLeg = false;
+		mirrorShard = false;
+		cutHand = false;
 	}
 
 	// Update is called once per frame
@@ -34,6 +42,23 @@ public class TextController : MonoBehaviour
 		print ("Chest key: " + inv_smallKey);
 		print ("Chair leg: " + inv_chairLeg);
 		print ("Mirror Piece: " + inv_mirrorShard);
+
+		if (Input.GetKeyDown (KeyCode.Escape)) {myState = States.begin;}
+
+		if (inv_chairLeg == Items.chair_leg) {
+			chairLeg = true;
+		} else if (inv_chairLeg == Items.sharp_chair_leg) {
+			sharpChairLeg = true;
+		}
+		if (inv_mirrorShard == Items.mirror_shard) {
+			mirrorShard = true;
+		}
+		if (self_Hand == Items.cut_hand) {
+			cutHand = true;
+		}
+		if (inv_smallKey == Items.small_key) {
+			smallKey = true;
+		}
 
 		if (myState == States.begin) {
 			begin ();
@@ -53,6 +78,8 @@ public class TextController : MonoBehaviour
 			chest_1 ();
 		} else if (myState == States.chest_leg) {
 			chest_leg ();
+		} else if (myState == States.chest_shard) {
+			chest_shard ();
 		} else if (myState == States.chest_leg_shard) {
 			chest_leg_shard ();
 		} else if (myState == States.chest_sharp_leg) {
@@ -86,30 +113,30 @@ public class TextController : MonoBehaviour
 		if (myState == States.window_0) {
 			window ();
 		} else if (myState == States.window_1) {
-			window_1 ();
+			window ();
 		}
 
-		if (myState == States.door_0) {
-			door_0 ();
-		} else if (myState == States.door_1) {
-			door_1 ();
-		} else if (myState == States.door_inspect) {
-			door_inspect ();
-		} else if (myState == States.freedom) {
-			freedom ();
+		if (myState == States.gate_0) {
+			gate_0 ();
+		} else if (myState == States.gate_1) {
+			gate_1 ();
+		} else if (myState == States.gate_inspect) {
+			gate_inspect ();
+		} else if (myState == States.gate_open_cut) {
+			gate_open_cut ();
 		}
 	}
 
 	void begin ()
 	{
 		text.text = "You have awaken on a cold concrete floor. You groggily push yourself into a sitting position, feeling patches of grass growing from the lifeless concrete around you. " +
-			"Confused, you stand up and notice your entire right leg throb ever so slightly. Dismissing whatever affliction your leg has contracted for the moment, " +
-			"you turn your attention to the tiny room where you have apparently stayed the night, though with no recollection of this whatsoever.\n" +
+			"Confused, you stand up and notice your entire right leg slightly throbbing.\n " +
 			"\n" +
-			"As you scan your surroundings, it appears that you have been taken to a prison cell. The rusty bars blocking your freedom offer you " +
-			"no sympathy as you stare at them in bewilderment.\n" +
+			"Dismissing whatever affliction your leg has contracted for the moment, " +
+			"you turn your attention to the tiny room where you have apparently stayed the night. Directly in front of you is a rusty gate, the lock and handle towards the end of the wall. " +
+			"You walk over to the gate and try to slide it open; it won't budge.\n" +
 			"\n" +
-			"You must find a way out of here before the kidnappers get back to you!\n" +
+			"You must find a way out of here!\n" +
 			"\n" +
 			"Press Enter to continue.";
 
@@ -120,19 +147,22 @@ public class TextController : MonoBehaviour
 
 	void cell ()
 	{
-		text.text = "Continuing your search of the room, you notice a Cracked Mirror propped against the western wall, a Small Chest in the southeast corner of the room, and a Wooden Chair " +
-			"next to the Small Chest. Looking at the bars again, you must have missed the handle of the Cell Door. It is, however, locked. There is also a " +
-			"Window in the southern wall a ways above you, allowing the only illumination into your cell. You must find a light source or a way out before dark.\n" +
-			"\n" +
-			"What will you do?\n" +
-			"\n" +
-			"Press I to check your Belongings.\n" +
-			"\n" +
-			"Press C to check the Small Chest.\n" +
-			"Press M to view the Cracked Mirror.\n" +
-			"Press S to inspect the Wooden Chair.\n" +
-			"Press D to examine the Cell Door.\n" +
-			"Press W to look at the Barred Window that's out of your reach.\n";
+		text.text = "You scan your surroundings, the only illumination coming from the small window in the wall opposite the Cell gate, which is unfortunately barred and several feet higher than you. " +
+		"The cell itself does not look inviting. There are multitudes of cracks and scratch marks on the walls, spider webs are strung carelessly about, and dried blood in all corners of the room; " +
+		"the feel of decay and dilapidation is all around you...\n" +
+		"\n" +
+		"You notice a cracked Mirror propped against what must be the northern wall, a small Chest in the southwest corner of the room, and a wooden Chair " +
+		"next to the Chest. Considering your only light is the sunlight, you must find a light source or a way out before dark.\n" +
+		"\n" +
+		"What will you do?\n" +
+		"\n" +
+		"Press I to check your Belongings.\n" +
+		"\n" +
+		"Press C to check the Chest, " +
+		"Press M to view the Mirror, " +
+		"Press S to inspect the Chair, " +
+		"Press W to look at the Window, " +
+		"Press G to examine the Gate.";
 
 		//Belongings
 		if (Input.GetKeyDown (KeyCode.I)) {
@@ -159,9 +189,9 @@ public class TextController : MonoBehaviour
 			myState = States.window_0;
 		}
 
-		//Door
-		if (Input.GetKeyDown (KeyCode.D)) {
-			myState = States.door_0;
+		//Gate
+		if (Input.GetKeyDown (KeyCode.G)) {
+			myState = States.gate_0;
 		}
 	}
 
@@ -173,11 +203,11 @@ public class TextController : MonoBehaviour
 		"\n" +
 		"Press I to check your Belongings.\n" +
 		"\n" +
-		"Press C to check the Small Chest.\n" +
-		"Press M to view the Cracked Mirror.\n" +
-		"Press S to inspect the Wooden Chair.\n" +
-		"Press D to examine the Cell Door.\n" +
-		"Press W to look at the Barred Window that's out of your reach.\n";
+		"Press C to check the Chest.\n" +
+		"Press M to view the Mirror.\n" +
+		"Press S to inspect the Chair.\n" +
+		"Press W to look at the Window.\n" +
+		"Press G to examine the Gate.\n";
 
 		//Belongings
 		if (Input.GetKeyDown (KeyCode.I)) {
@@ -216,12 +246,12 @@ public class TextController : MonoBehaviour
 			myState = States.window_1;
 		}
 
-		//Door
-		if (Input.GetKeyDown (KeyCode.D)) {
+		//Gate
+		if (Input.GetKeyDown (KeyCode.G)) {
 			if (inv_smallKey == Items.small_key) {
-				myState = States.door_1;
+				myState = States.gate_1;
 			} else {
-				myState = States.door_0;
+				myState = States.gate_0;
 			}
 		}
 	}
@@ -230,20 +260,6 @@ public class TextController : MonoBehaviour
 
 	void belongings ()
 	{
-		bool chairLeg = false, sharpChairLeg = false, mirrorShard = false, smallKey = false;
-
-		if (inv_chairLeg == Items.chair_leg) {
-			chairLeg = true;
-		} else if (inv_chairLeg == Items.sharp_chair_leg) {
-			sharpChairLeg = true;
-		}
-		if (inv_mirrorShard == Items.mirror_shard) {
-			mirrorShard = true;
-		}
-		if (inv_smallKey == Items.small_key) {
-			smallKey = true;
-		}
-
 		if (!chairLeg && !sharpChairLeg && !mirrorShard && !smallKey) {
 			text.text = "You've only got the clothes on your back.\n" +
 			"\n" +
@@ -253,8 +269,9 @@ public class TextController : MonoBehaviour
 				myState = States.cell_return;
 			}
 		} else {
-			text.text = "Here's the stuff that you've got: \n\n" +
-				"Press R to go back\n";
+			text.text = "Press R to go back\n" +
+			"\n" +
+			"Here's the stuff that you've got:\n";
 
 			if (chairLeg == true && mirrorShard == true && smallKey == true) {
 				inventory.text = "Wooden Chair Leg\n" +
@@ -300,17 +317,19 @@ public class TextController : MonoBehaviour
 
 	void chest ()
 	{
-		text.text = "As you inspect the small, wooden chest, it appears to be unlocked.\n" +
+		text.text = "Looking closely at the chest, you notice it is slightly ajar.\n" +
 		"\n" +
-		"Press O to open the chest.\n" +
-		"Press R to roam the cell.\n";
+		"Press O to open the Chest.\n" +
+		"Press R to roam the Cell.\n";
 
 		if (Input.GetKeyDown (KeyCode.O)) {
-			if (inv_chairLeg == Items.chair_leg && inv_mirrorShard == Items.empty) {
+			if (chairLeg && !mirrorShard) {
 				myState = States.chest_leg;
-			} else if (inv_chairLeg == Items.chair_leg && inv_mirrorShard == Items.mirror_shard) {
+			} else if (!chairLeg && mirrorShard) {
+				myState = States.chest_shard;
+			} else if (chairLeg && mirrorShard) {
 				myState = States.chest_leg_shard;
-			} else if (inv_chairLeg == Items.sharp_chair_leg ) {
+			} else if (sharpChairLeg) {
 				myState = States.chest_open;
 			} else {
 				myState = States.chest_1;
@@ -323,7 +342,7 @@ public class TextController : MonoBehaviour
 
 	void chest_1 ()
 	{
-		text.text = "Even though the chest is unlocked, it won't budge. You'll need something strong to pry it open.\n" +
+		text.text = "The chest seems to be stuck in place and won't give way. You'll need something strong to pry it open.\n" +
 		"\n" +
 		"Press R to roam the Cell.\n";
 
@@ -334,7 +353,18 @@ public class TextController : MonoBehaviour
 
 	void chest_leg ()
 	{
-		text.text = "The wooden chair leg does not seem to fit in the opening of the chest. Maybe if you could sharpen it somehow...\n" +
+		text.text = "The wooden chair leg does not fit in the opening of the chest.\n" +
+		"\n" +
+		"Press R to roam the Cell.\n";
+
+		if (Input.GetKeyDown (KeyCode.R)) {
+			myState = States.cell_return;
+		}
+	}
+
+	void chest_shard ()
+	{
+		text.text = "You'd break the glass if you tried using it to open the chest!\n" +
 		"\n" +
 		"Press R to roam the Cell.\n";
 
@@ -345,9 +375,9 @@ public class TextController : MonoBehaviour
 
 	void chest_leg_shard ()
 	{
-		text.text = "The wooden chair leg does not seem to fit in the opening of the chest. Maybe if you could sharpen it somehow...\n" +
+		text.text = "The wooden chair leg does not fit in the opening of the chest.\n" +
 		"\n" +
-		"Press S to sharpen the wooden chair leg with the shard of glass.\n" +
+		"Press S to sharpen the chair leg with the shard of glass.\n" +
 		"Press R to roam the Cell.\n";
 
 		if (Input.GetKeyDown (KeyCode.S)) {
@@ -365,11 +395,11 @@ public class TextController : MonoBehaviour
 
 		text.text = "After some careful sharpening, you've flattened one end of the leg.\n" +
 			"\n" +
-			"Press O to use the sharpened leg to open the chest.\n" +
+			"Press O to use the sharpened leg to pry open the chest.\n" +
 			"Press R to roam the Cell.\n";
 
 		if (Input.GetKeyDown (KeyCode.O)) {
-			myState = States.chest_opened;
+			myState = States.chest_open;
 		}
 
 		if (Input.GetKeyDown (KeyCode.R)) {
@@ -400,7 +430,7 @@ public class TextController : MonoBehaviour
 
 		text.text = "You took the Key!\n" +
 			"\n" +
-			"Press R to roam the cell.\n";
+			"Press R to roam the Cell.\n";
 
 		if (Input.GetKeyDown (KeyCode.R)) {
 			myState = States.cell_return;
@@ -411,7 +441,7 @@ public class TextController : MonoBehaviour
 	{
 		text.text = "You've already opened the Small Chest.\n" +
 		"\n" +
-		"Press R to roam the cell.\n";
+		"Press R to roam the Cell.\n";
 
 		if (Input.GetKeyDown (KeyCode.R)) {
 			myState = States.cell_return;
@@ -422,8 +452,8 @@ public class TextController : MonoBehaviour
 
 	void mirror_0 ()
 	{
-		text.text = "You look at the mirror, its intricate border design seemingly out of place in a rotting cell like this. It stands propped up against the cold concrete wall; " +
-		"your reflection muddied and distorted from the many cracks. There are some shards of glass laying around the mirror as well.\n" +
+		text.text = "You look at the mirror, its intricate border design seemingly out of place in a derelict cell like this. It stands propped up against the cold concrete wall; " +
+		"your reflection muddied and distorted from the several cracks.\n" +
 		"\n" +
 		"Press T to pick up a shard of glass.\n" +
 		"Press F to look at your reflection.\n" +
@@ -445,9 +475,10 @@ public class TextController : MonoBehaviour
 	void mirror_1 ()
 	{
 		inv_mirrorShard = Items.mirror_shard;
+		self_Hand = Items.cut_hand;
 
-		text.text = "As you attempt to tear apart a shard of glass from the mirror, the entire mirror shatters. As you hastily tear free a shard in the rain of glassware, " +
-		"you receive a long cut on your palm of your hand. You grimace at the pain as you carefully put the shard in your back pocket.\n" +
+		text.text = "As you attempt to tear apart a shard of glass from the mirror, the entire mirror shatters. You hastily tear free a shard in the rain of glassware, " +
+		"receiving a long cut on your palm of your hand. You grimace at the pain as you carefully put the shard in your back pocket.\n" +
 		"\n" +
 		"Press R to roam the Cell.\n";
 
@@ -508,7 +539,6 @@ public class TextController : MonoBehaviour
 		inv_chairLeg = Items.chair_leg;
 
 		text.text = "You are able to rip the Chair Leg apart with ease. As you inspect the wood, the chair finally succumbs to its old age and clumsily crumbles to the floor.\n" +
-			"Upon further inspection, the chair leg doesn't look like it belongs with the rest of the chair; the wood looks to be in a much healthier state than it's other parts. Strange...\n" +
 		"\n" +
 		"Press R to roam the Cell.\n";
 
@@ -544,7 +574,7 @@ public class TextController : MonoBehaviour
 
 	void window_1 ()
 	{
-		text.text = "You take a brief look back at the window. You find the sunlight reassuring in this nightmarish place.\n" +
+		text.text = "You take a brief look back at the window. You find the sunlight reassuring in this foreign place.\n" +
 		"\n" +
 		"Press R to roam the Cell.";
 
@@ -553,18 +583,17 @@ public class TextController : MonoBehaviour
 		}
 	}
 		
-	//****************************************** DOOR *************************************************//
+	//****************************************** GATE *************************************************//
 
-	void door_0 ()
+	void gate_0 ()
 	{
-		text.text = "The rust has almost completely taken over the metal bars that block you from your freedom. The cell door is placed in the middle of the bars, " +
-		"and is just big enough for you to fit through.\n" +
+		text.text = "Rust has almost completely taken over the metal bars that block you from your corridor. You'll need to find a key to slide open the gate.\n" +
 		"\n" +
-		"Press P to inspect the door.\n" +
+		"Press P to inspect the handle.\n" +
 		"Press R to roam the Cell.\n";
 
 		if (Input.GetKeyDown (KeyCode.P)) {
-			myState = States.door_inspect;
+			myState = States.gate_inspect;
 		}
 
 		if (Input.GetKeyDown (KeyCode.R)) {
@@ -572,9 +601,9 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void door_inspect ()
+	void gate_inspect ()
 	{
-		text.text = "Upon further inspection, you notice an odd sort of fungus on the door handle.\n" +
+		text.text = "Upon further inspection, you notice an odd sort of fungus on the gate handle.\n" +
 		"\n" +
 		"Press R to roam the Cell.\n";
 		
@@ -583,15 +612,19 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void door_1 ()
+	void gate_1 ()
 	{
-		text.text = "Now that you've got a Key, would you like to try it on the cell door?\n" +
+		text.text = "Now that you've got a Key, would you like to try it on the cell gate?\n" +
 		"\n" +
 		"Press K to use the Key.\n" +
 		"Press R to roam the Cell further.\n";
 
 		if (Input.GetKeyDown (KeyCode.K)) {
-			myState = States.freedom;
+			if (cutHand) {
+				myState = States.gate_open_cut;
+			} else {
+				myState = States.gate_open_cut;
+			}
 		}
 
 		if (Input.GetKeyDown (KeyCode.R)) {
@@ -599,12 +632,18 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void freedom ()
+	void gate_open_cut ()
 	{
-		text.text = "They Key works! Trembling with fear yet filled with determination, you take hold of the handle and slowly turn it. " +
-		"You push open the cell door as slowly and as quietly as you can, for fear of alerting your jailers. As you step out into the sunlit hallway, your legs throbbing starts " +
-		"to throb a bit faster now, and you notice your cut hand, which you used to turn the rusty handle, has begun to throb as well. Worried, scared, you are determined to find " +
-		"a way out of this nightmare.\n";
+		text.text = "The Key works! You take a deep breath and take hold of the handle, sliding the cell gate open  " +
+		"as slowly and as quietly as you can, for fear of alerting anyone to your presence. As you step out into the dimly sunlit corridor, your legs throbbing starts " +
+		"to throb a bit faster now, and you notice your cut hand, which you used to take hold of the fungus-covered handle, has begun to throb as well. Worried, scared, " +
+		"you are filled with determination.\n" +
+		"\n" +
+		"The game's over! Press Escape to play again!";
+
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			myState = States.begin;
+		}
 	}
 }
 
