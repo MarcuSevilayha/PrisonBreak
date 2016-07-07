@@ -6,7 +6,7 @@ public class TextController : MonoBehaviour
 {
 
 	public Text text, inventory;
-	private enum States {begin, inventory,
+	private enum States {begin, belong,
 						cell, cell_return,
 						chest_0, chest_1, chest_leg, chest_leg_shard, chest_sharp_leg, chest_open, chest_opened, chest_done,
 						mirror_0, mirror_1, mirror_me, mirror_done,
@@ -36,71 +36,71 @@ public class TextController : MonoBehaviour
 		print ("Mirror Piece: " + inv_mirrorShard);
 
 		if (myState == States.begin) {
-			state_begin ();
+			begin ();
 		} else if (myState == States.cell) {
-			state_cell ();
+			cell ();
 		} else if (myState == States.cell_return) {
-			state_cell_return ();
+			cell_return ();
 		}
 
-		if (myState == States.inventory) {
-			state_inventory ();
+		if (myState == States.belong) {
+			belongings ();
 		}
 
 		if (myState == States.chest_0) {
-			state_chest ();
+			chest ();
 		} else if (myState == States.chest_1) {
-			state_chest_1 ();
+			chest_1 ();
 		} else if (myState == States.chest_leg) {
-			state_chest_leg ();
+			chest_leg ();
 		} else if (myState == States.chest_leg_shard) {
-			state_chest_leg_shard ();
+			chest_leg_shard ();
 		} else if (myState == States.chest_sharp_leg) {
-			state_chest_sharp_leg ();
+			chest_sharp_leg ();
 		} else if (myState == States.chest_open) {
-			state_chest_open ();
+			chest_open ();
 		} else if (myState == States.chest_opened) {
-			state_chest_opened ();
+			chest_opened ();
 		} else if (myState == States.chest_done) {
-			state_chest_done ();
+			chest_done ();
 		}
 
 		if (myState == States.mirror_0) {
-			state_mirror_0 ();
+			mirror_0 ();
 		} else if (myState == States.mirror_1) {
-			state_mirror_1 ();
+			mirror_1 ();
 		} else if (myState == States.mirror_me) {
-			state_mirror_me ();
+			mirror_me ();
 		} else if (myState == States.mirror_done) {
-			state_mirror_done ();
+			mirror_done ();
 		}
 
 		if (myState == States.chair_0) {
-			state_chair_0 ();
+			chair_0 ();
 		} else if (myState == States.chair_1) {
-			state_chair_1 ();
+			chair_1 ();
 		} else if (myState == States.chair_done) {
-			state_chair_done ();
+			chair_done ();
 		}
 
 		if (myState == States.window_0) {
-			state_window ();
+			window ();
 		} else if (myState == States.window_1) {
-			state_window_1 ();
+			window_1 ();
 		}
 
 		if (myState == States.door_0) {
-			state_door_0 ();
+			door_0 ();
 		} else if (myState == States.door_1) {
-			state_door_1 ();
+			door_1 ();
 		} else if (myState == States.door_inspect) {
-			state_door_inspect ();
+			door_inspect ();
 		} else if (myState == States.freedom) {
-			state_freedom ();
+			freedom ();
 		}
 	}
 
-	void state_begin ()
+	void begin ()
 	{
 		text.text = "You have awaken on a cold concrete floor. You groggily push yourself into a sitting position, feeling patches of grass growing from the lifeless concrete around you. " +
 			"Confused, you stand up and notice your entire right leg throb ever so slightly. Dismissing whatever affliction your leg has contracted for the moment, " +
@@ -118,7 +118,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_cell ()
+	void cell ()
 	{
 		text.text = "Continuing your search of the room, you notice a Cracked Mirror propped against the western wall, a Small Chest in the southeast corner of the room, and a Wooden Chair " +
 			"next to the Small Chest. Looking at the bars again, you must have missed the handle of the Cell Door. It is, however, locked. There is also a " +
@@ -126,7 +126,7 @@ public class TextController : MonoBehaviour
 			"\n" +
 			"What will you do?\n" +
 			"\n" +
-			"Press I to check your Inventory.\n" +
+			"Press I to check your Belongings.\n" +
 			"\n" +
 			"Press C to check the Small Chest.\n" +
 			"Press M to view the Cracked Mirror.\n" +
@@ -134,9 +134,9 @@ public class TextController : MonoBehaviour
 			"Press D to examine the Cell Door.\n" +
 			"Press W to look at the Barred Window that's out of your reach.\n";
 
-		//Inventory
+		//Belongings
 		if (Input.GetKeyDown (KeyCode.I)) {
-			myState = States.inventory;
+			myState = States.belong;
 		}
 
 		//Chest
@@ -165,13 +165,13 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_cell_return ()
+	void cell_return ()
 	{
 		inventory.text = " ";
 
 		text.text = "You continue your search of the cell. What will you do?\n" +
 		"\n" +
-		"Press I to check your Inventory.\n" +
+		"Press I to check your Belongings.\n" +
 		"\n" +
 		"Press C to check the Small Chest.\n" +
 		"Press M to view the Cracked Mirror.\n" +
@@ -179,9 +179,9 @@ public class TextController : MonoBehaviour
 		"Press D to examine the Cell Door.\n" +
 		"Press W to look at the Barred Window that's out of your reach.\n";
 
-		//Inventory
+		//Belongings
 		if (Input.GetKeyDown (KeyCode.I)) {
-			myState = States.inventory;
+			myState = States.belong;
 		}
 
 		//Chest
@@ -228,7 +228,7 @@ public class TextController : MonoBehaviour
 
 	//****************************************** INVENTORY *************************************************//
 
-	void state_inventory ()
+	void belongings ()
 	{
 		bool chairLeg = false, sharpChairLeg = false, mirrorShard = false, smallKey = false;
 
@@ -298,7 +298,7 @@ public class TextController : MonoBehaviour
 
 	//****************************************** CHEST *************************************************//
 
-	void state_chest ()
+	void chest ()
 	{
 		text.text = "As you inspect the small, wooden chest, it appears to be unlocked.\n" +
 		"\n" +
@@ -321,7 +321,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chest_1 ()
+	void chest_1 ()
 	{
 		text.text = "Even though the chest is unlocked, it won't budge. You'll need something strong to pry it open.\n" +
 		"\n" +
@@ -332,7 +332,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chest_leg ()
+	void chest_leg ()
 	{
 		text.text = "The wooden chair leg does not seem to fit in the opening of the chest. Maybe if you could sharpen it somehow...\n" +
 		"\n" +
@@ -343,7 +343,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chest_leg_shard ()
+	void chest_leg_shard ()
 	{
 		text.text = "The wooden chair leg does not seem to fit in the opening of the chest. Maybe if you could sharpen it somehow...\n" +
 		"\n" +
@@ -359,7 +359,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chest_sharp_leg ()
+	void chest_sharp_leg ()
 	{
 		inv_chairLeg = Items.sharp_chair_leg;
 
@@ -377,7 +377,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chest_open ()
+	void chest_open ()
 	{
 		text.text = "Using the sharpened chair leg, you are able to fit it inside the opening of the chest and pry it open. Inside is a Key.\n" +
 		"\n" +
@@ -394,7 +394,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chest_opened ()
+	void chest_opened ()
 	{
 		inv_smallKey = Items.small_key;
 
@@ -407,7 +407,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chest_done ()
+	void chest_done ()
 	{
 		text.text = "You've already opened the Small Chest.\n" +
 		"\n" +
@@ -420,12 +420,12 @@ public class TextController : MonoBehaviour
 
 	//****************************************** MIRROR *************************************************//
 
-	void state_mirror_0 ()
+	void mirror_0 ()
 	{
 		text.text = "You look at the mirror, its intricate border design seemingly out of place in a rotting cell like this. It stands propped up against the cold concrete wall; " +
 		"your reflection muddied and distorted from the many cracks. There are some shards of glass laying around the mirror as well.\n" +
 		"\n" +
-		"Press T to pick up a glass shard of glass.\n" +
+		"Press T to pick up a shard of glass.\n" +
 		"Press F to look at your reflection.\n" +
 		"Press R to roam the Cell.\n";
 
@@ -442,7 +442,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_mirror_1 ()
+	void mirror_1 ()
 	{
 		inv_mirrorShard = Items.mirror_shard;
 
@@ -456,7 +456,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_mirror_me ()
+	void mirror_me ()
 	{
 		text.text = "You look pretty good, despite the bed head. Your plaid, button up shirt and green pants look out of place in your desolate new room.\n" +
 		"\n" +
@@ -472,7 +472,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_mirror_done ()
+	void mirror_done ()
 	{
 		text.text = "The mirror finally looks like it belongs with this room, broken and all.\n" +
 		"\n" +
@@ -486,7 +486,7 @@ public class TextController : MonoBehaviour
 
 	//****************************************** CHAIR *************************************************//
 
-	void state_chair_0 ()
+	void chair_0 ()
 	{
 		text.text = "The chair has sat here for what seems like an eternity; the wood is decayed and it looks close to crumbling apart. " +
 		"As you walk closer, one of the chair's legs looks like it can easily be torn apart.\n" +
@@ -503,7 +503,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chair_1 ()
+	void chair_1 ()
 	{
 		inv_chairLeg = Items.chair_leg;
 
@@ -517,7 +517,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_chair_done ()
+	void chair_done ()
 	{
 		text.text = "Thanks to you, the chair has finally succumbed to its old age.\n" +
 		"\n" +
@@ -530,7 +530,7 @@ public class TextController : MonoBehaviour
 
 	//****************************************** WINDOW *************************************************//
 
-	void state_window () 
+	void window () 
 	{
 		text.text = "You stare up at the only source of light in this dilapidated cell. Bloodied scratch marks lead their way up to the window, never quite reaching it. " +
 		"You shudder and hope that you can find a way out of here before it gets dark.\n" +
@@ -542,7 +542,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_window_1 ()
+	void window_1 ()
 	{
 		text.text = "You take a brief look back at the window. You find the sunlight reassuring in this nightmarish place.\n" +
 		"\n" +
@@ -555,7 +555,7 @@ public class TextController : MonoBehaviour
 		
 	//****************************************** DOOR *************************************************//
 
-	void state_door_0 ()
+	void door_0 ()
 	{
 		text.text = "The rust has almost completely taken over the metal bars that block you from your freedom. The cell door is placed in the middle of the bars, " +
 		"and is just big enough for you to fit through.\n" +
@@ -572,7 +572,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_door_inspect ()
+	void door_inspect ()
 	{
 		text.text = "Upon further inspection, you notice an odd sort of fungus on the door handle.\n" +
 		"\n" +
@@ -583,7 +583,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_door_1 ()
+	void door_1 ()
 	{
 		text.text = "Now that you've got a Key, would you like to try it on the cell door?\n" +
 		"\n" +
@@ -599,7 +599,7 @@ public class TextController : MonoBehaviour
 		}
 	}
 
-	void state_freedom ()
+	void freedom ()
 	{
 		text.text = "They Key works! Trembling with fear yet filled with determination, you take hold of the handle and slowly turn it. " +
 		"You push open the cell door as slowly and as quietly as you can, for fear of alerting your jailers. As you step out into the sunlit hallway, your legs throbbing starts " +
