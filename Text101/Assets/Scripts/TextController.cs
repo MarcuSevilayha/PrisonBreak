@@ -45,6 +45,7 @@ public class TextController : MonoBehaviour
 
 		if (Input.GetKeyDown (KeyCode.Escape)) {myState = States.begin;}
 
+        // Chair States
 		if (inv_chairLeg == Items.chair_leg) {
 			chairLeg = true;
 		} else if (inv_chairLeg == Items.sharp_chair_leg) {
@@ -60,6 +61,7 @@ public class TextController : MonoBehaviour
 			smallKey = true;
 		}
 
+        // Cell States
 		if (myState == States.begin) {
 			begin ();
 		} else if (myState == States.cell) {
@@ -72,6 +74,7 @@ public class TextController : MonoBehaviour
 			belongings ();
 		}
 
+        // Chest States
 		if (myState == States.chest_0) {
 			chest ();
 		} else if (myState == States.chest_1) {
@@ -92,6 +95,7 @@ public class TextController : MonoBehaviour
 			chest_done ();
 		}
 
+        // Mirror States
 		if (myState == States.mirror_0) {
 			mirror_0 ();
 		} else if (myState == States.mirror_1) {
@@ -102,6 +106,7 @@ public class TextController : MonoBehaviour
 			mirror_done ();
 		}
 
+        // Chair States
 		if (myState == States.chair_0) {
 			chair_0 ();
 		} else if (myState == States.chair_1) {
@@ -110,12 +115,14 @@ public class TextController : MonoBehaviour
 			chair_done ();
 		}
 
+        // Window States
 		if (myState == States.window_0) {
 			window ();
 		} else if (myState == States.window_1) {
 			window ();
 		}
 
+        // Gate States
 		if (myState == States.gate_0) {
 			gate_0 ();
 		} else if (myState == States.gate_1) {
